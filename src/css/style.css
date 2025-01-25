@@ -6,6 +6,7 @@
 
 body {
     user-select: none;
+    background: #000;
 }
 
 #container {

@@ -19,7 +19,9 @@ export class Game extends Scene {
         const y = scale.height / 2;
 
         const add = this.add;
-        add.image(x, y, 'bg');
-        add.image(x, y, 'logo');
+        add.image(x, y, 'sprites', 'white')
+            .setScale(10);
+        add.image(x, y, 'sprites', 'red')
+            .setScale(4);
     }
 }

@@ -27,8 +27,8 @@ export const
         readonly w: number;
         readonly h: number;
     } = {
-        w: 1070,
-        h: 600
+        w: 1920,
+        h: 1080
     },
     /**
      * Google Analytics 4 tag ID

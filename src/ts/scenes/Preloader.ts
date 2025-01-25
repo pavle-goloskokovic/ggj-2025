@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Scene = Phaser.Scene;
+import spritesData from '../../data/sprites.json';
 
 /**
  * Preloader Phaser scene.
@@ -18,8 +19,9 @@ export class Preloader extends Scene {
         // TODO preload assets
 
         this.load
-            .image('bg', require('../../assets/images/bg.jpg'))
-            .image('logo', require('../../assets/images/logo.png'));
+            .atlas('sprites',
+                require('../../assets/images/sprites.png'),
+                spritesData);
     }
 
     create (): void

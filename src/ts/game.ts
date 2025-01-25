@@ -7,6 +7,8 @@ import '../css/style.css'; // loading css
 import Phaser from 'phaser';
 import PhaserGame = Phaser.Game;
 import GameConfig = Phaser.Types.Core.GameConfig;
+import FIT = Phaser.Scale.ScaleModes.FIT;
+import CENTER_BOTH = Phaser.Scale.CENTER_BOTH;
 
 import { size, stats } from './game.config';
 
@@ -16,8 +18,12 @@ import { Game } from './scenes/Game';
 
 const config: GameConfig = {
     parent: 'container', // parent id - '' means  no container
-    width: size.w,
-    height: size.h,
+    scale: {
+        width: size.w,
+        height: size.h,
+        mode: FIT,
+        autoCenter: CENTER_BOTH
+    },
     scene: [
         Boot,
         Preloader,
