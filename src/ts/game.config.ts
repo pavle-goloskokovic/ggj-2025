@@ -3,13 +3,12 @@ export const
      * Game title used for page title tag and metadata.
      * @type {string}
      */
-    title =
-        'Phaser 3.87, Webpack 5, and TypeScript template', // TODO update
+    title = 'GGJ 2025 Entry',
     /**
      * Game description used for html page metadata.
      * @type {string}
      */
-    description = 'TODO add description', // TODO update
+    description = '',
     /**
      * Setting which enables us to quickly mute game sounds.
      * @type {boolean}
@@ -35,4 +34,4 @@ export const
      * Google Analytics 4 tag ID
      * @type {string}
      */
-    tagId: string = null; // 'TAG_ID'; // TODO update
+    tagId: string = null;

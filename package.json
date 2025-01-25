@@ -1,7 +1,7 @@
 {
-    "name": "phaser3-webpack5-typescript-template",
+    "name": "ggj-2025",
     "version": "0.1.0",
-    "description": "Phaser 3.87, Webpack 5, and TypeScript template",
+    "description": "GGJ 2025 Entry",
     "main": "src/ts/game.ts",
     "private": true,
     "scripts": {
@@ -11,29 +11,8 @@
         "eslint": "eslint **/*.ts",
         "eslint:fix": "eslint --fix **/*.ts"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/pavle-goloskokovic/phaser3-webpack5-typescript-template.git"
-    },
-    "keywords": [
-        "phaser",
-        "type",
-        "script",
-        "typescript",
-        "boilerplate",
-        "template",
-        "gamedev",
-        "game",
-        "development",
-        "javascript",
-        "webpack"
-    ],
     "author": "Pavle Goloskoković",
     "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/pavle-goloskokovic/phaser3-webpack5-typescript-template/issues"
-    },
-    "homepage": "https://github.com/pavle-goloskokovic/phaser3-webpack5-typescript-template#readme",
     "dependencies": {
         "phaser": "^3.87.0",
         "stats.js": "^0.17.0"
