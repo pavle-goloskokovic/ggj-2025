@@ -1,6 +1,20 @@
 import Phaser from 'phaser';
 import Scene = Phaser.Scene;
 
+const canopy: number[] = [];
+for (let i = 0; i < 100; i++)
+{
+    const segment = 100 / 16;
+
+    const progress = i / segment;
+    const segmentIndex = Math.floor(progress);
+    const isUp = segmentIndex % 2 === 0;
+
+    const elevation = progress - segmentIndex;
+
+    canopy.push(20 + (isUp ? elevation : 1 - elevation) * 70);
+}
+
 /**
  * Game Phaser scene.
  *
@@ -26,10 +40,23 @@ export class Game extends Scene {
 
         for (let i = 0; i < 100; i++)
         {
-            add.image(60 + 1 + i * 18, 800 - 30, 'sprites', i === 0 ? 'red' : 'white')
+            add.image(
+                60 + 1 + i * 18,
+                800 - 30 - canopy[i],
+                'sprites', i === 0 ? 'red' : 'white')
                 .setOrigin(0.5, 1)
-                .setDisplaySize(18 - 2, 200 + 5.4 * i);
+                .setDisplaySize(
+                    18 - 2,
+                    200 + 5.4 * i - canopy[i]);
 
+            /*add.image(
+                60 + 1 + i * 18,
+                800 - 30,
+                'sprites', 'red')
+                .setOrigin(0.5, 1)
+                .setDisplaySize(
+                    18 - 2,
+                    canopy[i]);*/
         }
     }
 }
