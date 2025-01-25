@@ -6,7 +6,7 @@
 
 body {
     user-select: none;
-    background: #000;
+    background: #333; /*#000;*/
 }
 
 #container {
