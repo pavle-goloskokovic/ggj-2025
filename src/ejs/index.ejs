@@ -1,0 +1,22 @@
+<!--!
+<%= banner %>
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%if (tagId) { %>
+        <%- require('./analytics.ejs')({ tagId }) %>
+    <% } %>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
+    <meta property="og:title" content="<%= title %>">
+    <meta property="og:description" content="<%= description %>">
+
+    <title><%= title %></title>
+</head>
+<body>
+<div id="container"></div>
+</body>
+</html>
