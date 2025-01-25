@@ -4,11 +4,74 @@
 			"image": "sprites.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 24,
-				"h": 12
+				"w": 1376,
+				"h": 554
 			},
 			"scale": 1,
 			"frames": [
+				{
+					"filename": "instructions",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 1374,
+						"h": 29
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1374,
+						"h": 29
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 1374,
+						"h": 29
+					}
+				},
+				{
+					"filename": "caci",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 694,
+						"h": 521
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 694,
+						"h": 521
+					},
+					"frame": {
+						"x": 1,
+						"y": 32,
+						"w": 694,
+						"h": 521
+					}
+				},
+				{
+					"filename": "even",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 600,
+						"h": 180
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 600,
+						"h": 180
+					},
+					"frame": {
+						"x": 697,
+						"y": 32,
+						"w": 600,
+						"h": 180
+					}
+				},
 				{
 					"filename": "red",
 					"rotated": false,
@@ -24,8 +87,8 @@
 						"h": 10
 					},
 					"frame": {
-						"x": 1,
-						"y": 1,
+						"x": 1299,
+						"y": 32,
 						"w": 10,
 						"h": 10
 					}
@@ -45,10 +108,31 @@
 						"h": 10
 					},
 					"frame": {
-						"x": 13,
-						"y": 1,
+						"x": 1311,
+						"y": 32,
 						"w": 10,
 						"h": 10
+					}
+				},
+				{
+					"filename": "odd",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 600,
+						"h": 180
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 600,
+						"h": 180
+					},
+					"frame": {
+						"x": 697,
+						"y": 214,
+						"w": 600,
+						"h": 180
 					}
 				}
 			]
@@ -57,6 +141,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:1c46e36fc7995780ec76bc368e39c94c:febe9e6a1ca9a21bd2295af245b4ae51:1eabdf11f75e3a4fe3147baf7b5be24b$"
+		"smartupdate": "$TexturePacker:SmartUpdate:30a78eaae90ff33d3fff6702ae8854c2:7cc9691c3a52c5ec8cb4d8fe30fb2136:1eabdf11f75e3a4fe3147baf7b5be24b$"
 	}
 }
