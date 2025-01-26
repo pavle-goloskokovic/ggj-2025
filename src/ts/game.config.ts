@@ -3,7 +3,7 @@ export const
      * Game title used for page title tag and metadata.
      * @type {string}
      */
-    title = 'GGJ 2025 Entry',
+    title = 'Bubble Odds - GGJ 2025 Entry',
     /**
      * Game description used for html page metadata.
      * @type {string}
@@ -18,7 +18,7 @@ export const
      * Setting which determines if stats should be enabled in game.
      * @type {boolean}
      */
-    stats = true,
+    stats = !true,
     /**
      * Game dimensions
      * @type {{w: number; h: number}}

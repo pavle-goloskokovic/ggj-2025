@@ -53,7 +53,7 @@ export default <webpack.Configuration>{
         filename: `[name]${ prod ? '.[contenthash]' : '' }.js`, // string
         // the filename template for entry chunks
         // TODO never set path to root as it will delete the whole project on next build
-        path: resolve(__dirname, 'dist'), // string
+        path: resolve(__dirname, 'docs'), // string
         // the target directory for all output files
         // must be an absolute path (use the Node.js path module)
         // publicPath: "/assets/", // string

@@ -1,7 +1,7 @@
 {
     "name": "ggj-2025",
     "version": "0.1.0",
-    "description": "GGJ 2025 Entry",
+    "description": "Bubble Odds - GGJ 2025 Entry",
     "main": "src/ts/game.ts",
     "private": true,
     "scripts": {
