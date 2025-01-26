@@ -21,7 +21,10 @@ export class Preloader extends Scene {
         this.load
             .atlas('sprites',
                 require('../../assets/images/sprites.png'),
-                spritesData);
+                spritesData)
+            .font('font1',
+                require('../../assets/fonts/PFEncoreSansPro-Bold.ttf'),
+                'truetype');
     }
 
     create (): void

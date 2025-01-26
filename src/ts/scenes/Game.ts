@@ -111,6 +111,15 @@ export class Game extends Scene {
                     canopy[i]);*/
         }
 
+        const scoreText = add.text(60, 30,
+            'ITERATIONS: 0 \n' +
+            'SCORE: 0', {
+                fontFamily: 'font1',
+                align: 'left',
+                fontSize: 28
+            }
+        ).setOrigin(0);
+
         shuffle(bars);
 
         const bubbleSortStepImage = (arr: Image[], j: number): boolean =>
@@ -138,7 +147,7 @@ export class Game extends Scene {
         {
             let processed = 0;
 
-            while (processed < 5)
+            while (processed < 7)
             {
                 console.log(ii, jj);
 
@@ -171,6 +180,10 @@ export class Game extends Scene {
             }
 
             iterations += processed;
+
+            scoreText.setText(
+                `ITERATIONS: ${iterations} \n` +
+                'SCORE: 0');
         };
         this.events.on('update', animationUpdate);
     }
