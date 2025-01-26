@@ -3,19 +3,10 @@ import Scene = Phaser.Scene;
 import Image = Phaser.GameObjects.Image;
 import WebAudioSoundManager = Phaser.Sound.WebAudioSoundManager;
 
-const canopy: number[] = [];
-for (let i = 0; i < 100; i++)
-{
-    const segment = 100 / 16;
-
-    const progress = i / segment;
-    const segmentIndex = Math.floor(progress);
-    const isUp = segmentIndex % 2 === 0;
-
-    const elevation = progress - segmentIndex;
-
-    canopy.push(20 + (isUp ? elevation : 1 - elevation) * 70);
-}
+export type OcsSoundManager = WebAudioSoundManager & {
+    osc: OscillatorNode;
+    oscVolume: GainNode;
+};
 
 const shuffle = function (array: Image[])
 {
@@ -84,9 +75,9 @@ export class Game extends Scene {
             .start();
 
         const VOLUME_ON = 0.2;
-        const sound = this.sound as WebAudioSoundManager;
-        const osc = sound.context.createOscillator();
-        const oscVolume = sound.context.createGain();
+        const sound = this.sound as OcsSoundManager;
+        const osc = sound.osc = sound.context.createOscillator();
+        const oscVolume = sound.oscVolume = sound.context.createGain();
         osc.connect(oscVolume);
         // osc.frequency.setValueAtTime(50, 0);
         oscVolume.connect(sound.destination);
@@ -96,8 +87,15 @@ export class Game extends Scene {
         const updateFrequency = (h: number) =>
         {
             osc.frequency.setValueAtTime(
-                50 + (1 - (h - 200) / 540) * 800, 0);
+                70 + (1 - (h - 200) / 540) * 800, 0);
         };
+
+        /*updateFrequency(740);
+        oscVolume.gain.setValueAtTime(0.8, 0);
+
+        this.scene.start('end');
+
+        return;*/
 
         const winSound = sound.add('win');
         winSound.addMarker({
@@ -249,24 +247,10 @@ export class Game extends Scene {
             {
                 for (let j = i; j < i + repeat + 1; j++)
                 {
-                    if (ended)
-                    {
-                        this.tweens.addCounter({
-                            duration: 2000,
-                            onUpdate: (t) =>
-                            {
-                                const val = t.getValue();
-
-                                oscVolume.gain.setValueAtTime(
-                                    val * 0.8, 0);
-                            }
-                        });
-                    }
-
                     this.tweens.add({
                         targets: bars[j],
                         displayHeight: 200 + 5.4 * j/* - canopy[j]*/,
-                        duration: ended ? 2000 : 1000,
+                        duration: ended ? 4000 : 1000,
                         ease: /*ended ?*/ 'Quad.easeOut' /*: 'Linear'*/,
                         onComplete: () =>
                         {
@@ -274,7 +258,9 @@ export class Game extends Scene {
                             {
                                 if (ended)
                                 {
-                                    console.log('ENDED');
+                                    // console.log('ENDED');
+
+                                    this.scene.start('end');
 
                                     /*sound.play('light', {
                                         loop: true
@@ -288,15 +274,25 @@ export class Game extends Scene {
                                     alpha: 0,
                                     delay: 500,
                                     duration: 500,
-                                    onUpdate: () =>
+                                    /*onUpdate: () =>
                                     {
                                         oscVolume.gain.setValueAtTime(
                                             bars[0].alpha * VOLUME_ON, 0);
-                                    },
+                                    },*/
                                     onComplete: () =>
                                     {
                                         shuffle(bars);
                                     }
+                                });
+
+                                this.tweens.addCounter({
+                                    delay: 500,
+                                    duration: 800,
+                                    onUpdate: (t) =>
+                                    {
+                                        oscVolume.gain.setValueAtTime(
+                                            (1 - t.getValue()) * VOLUME_ON, 0);
+                                    },
                                 });
 
                                 this.tweens.add({
@@ -325,6 +321,17 @@ export class Game extends Scene {
                     targets: [odd, even, scoreText],
                     alpha: 0,
                     duration: 2000
+                });
+
+                this.tweens.addCounter({
+                    duration: 7000,
+                    onUpdate: (t) =>
+                    {
+                        const val = t.getValue();
+
+                        oscVolume.gain.setValueAtTime(
+                            val * 0.8, 0);
+                    }
                 });
             }
 
