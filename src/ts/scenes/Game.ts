@@ -132,42 +132,46 @@ export class Game extends Scene {
             return false;
         };
 
+        let iterations = 0;
         let ii = 0, jj = 0;
-        const sortStepAnimated = () =>
+        const animationUpdate = () =>
         {
-            this.time.addEvent({
-                delay: 0,
-                callback: () =>
+            let processed = 0;
+
+            while (processed < 5)
+            {
+                console.log(ii, jj);
+
+                if (ii === bars.length)
                 {
-                    console.log(ii, jj);
+                    console.log('completed', iterations);
+                    this.events.off('update', animationUpdate);
+                    return;
+                }
+
+                while (!bubbleSortStepImage(bars, jj))
+                {
+                    jj++;
+
+                    if (jj === bars.length - 1)
+                    {
+                        ii++;
+                        jj = 0;
+                    }
 
                     if (ii === bars.length)
                     {
-                        console.log('completed');
+                        console.log('completed', iterations);
+                        this.events.off('update', animationUpdate);
                         return;
                     }
-
-                    while (!bubbleSortStepImage(bars, jj))
-                    {
-                        jj++;
-
-                        if (jj === bars.length - 1)
-                        {
-                            ii++;
-                            jj = 0;
-                        }
-
-                        if (ii === bars.length)
-                        {
-                            console.log('completed');
-                            return;
-                        }
-                    }
-
-                    sortStepAnimated();
                 }
-            });
+
+                processed++;
+            }
+
+            iterations += processed;
         };
-        sortStepAnimated();
+        this.events.on('update', animationUpdate);
     }
 }
