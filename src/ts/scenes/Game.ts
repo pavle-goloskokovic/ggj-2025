@@ -155,46 +155,137 @@ export class Game extends Scene {
         {
             // console.log('completed', iterations);
 
+            // const oldIterations = iterations;
             const oldScore = score;
             const delta = iterations % 2 === bet ?
                 iterations : -iterations;
 
             this.tweens.addCounter({
                 duration: 2000,
+                ease: 'Quart.easeOut',
                 onUpdate: (t) =>
                 {
-                    score = Math.round(oldScore + t.getValue() * delta);
+                    const val = t.getValue();
+                    // iterations = Math.round(oldIterations - val * delta);
+                    score = Math.round(oldScore + val * delta);
                     updateText();
                 },
                 onComplete: () =>
                 {
+                    // iterations = 0;
                     score = oldScore + delta;
                     updateText();
 
-                    for (let i = 0; i < bars.length; i++)
-                    {
-                        bars[i].alpha = 0;
-                    }
-
-                    shuffle(bars);
-
-                    this.tweens.add({
-                        targets: bars,
-                        alpha: 1,
-                        duration: 1000,
-                        onComplete: () =>
-                        {
-                            this.tweens.add({
-                                targets: [odd, even],
-                                alpha: 1,
-                                duration: 500
-                            });
-                        }
-                    });
+                    this.time.delayedCall(500, advance);
                 }
             });
 
             this.events.off('update', animationUpdate);
+        };
+
+        const advance = () =>
+        {
+            let i = 0;
+            while (bars[i].frame.name !== 'red')
+            {
+                i++;
+            }
+
+            const repeat = Math.min(23, bars.length - 1 - i);
+
+            const ended = i + repeat + 1 === bars.length;
+
+            const next = () =>
+            {
+                for (let j = i; j < i + repeat + 1; j++)
+                {
+                    this.tweens.add({
+                        targets: bars[j],
+                        displayHeight: 200 + 5.4 * j/* - canopy[j]*/,
+                        duration: ended ? 2000 : 1000,
+                        ease: /*ended ?*/ 'Quad.easeOut' /*: 'Linear'*/,
+                        onComplete: () =>
+                        {
+                            if (j === i) // only once
+                            {
+                                if (ended)
+                                {
+                                    console.log('ENDED');
+
+                                    return;
+                                }
+
+                                this.tweens.add({
+                                    targets: bars,
+                                    alpha: 0,
+                                    delay: 500,
+                                    duration: 500,
+                                    onComplete: () =>
+                                    {
+                                        shuffle(bars);
+                                    }
+                                });
+
+                                this.tweens.add({
+                                    targets: bars,
+                                    alpha: 1,
+                                    delay: 500 + 550,
+                                    duration: 600,
+                                    onComplete: () =>
+                                    {
+                                        this.tweens.add({
+                                            targets: [odd, even],
+                                            alpha: 1,
+                                            duration: 500
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            };
+
+            if (ended)
+            {
+                this.tweens.add({
+                    targets: [odd, even, scoreText],
+                    alpha: 0,
+                    duration: 2000
+                });
+            }
+
+            if (repeat)
+            {
+                const delay = 3000 / repeat;
+
+                for (let j = i; j < i + repeat; j++)
+                {
+                    this.time.addEvent({
+                        delay: (j - i) * delay,
+                        callback: () =>
+                        {
+                            const temp = bars[j];
+                            const x = temp.x;
+
+                            bars[j].x = bars[j + 1].x;
+                            bars[j + 1].x = x;
+
+                            bars[j] = bars[j + 1];
+                            bars[j + 1] = temp;
+                        }
+                    });
+                }
+
+                this.time.addEvent({
+                    delay: repeat * delay,
+                    callback: next
+                });
+            }
+            else
+            {
+                next();
+            }
         };
 
         const bars: Image[] = [];
