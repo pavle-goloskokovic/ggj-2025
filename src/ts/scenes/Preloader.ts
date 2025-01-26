@@ -19,6 +19,8 @@ export class Preloader extends Scene {
         // TODO preload assets
 
         this.load
+            .audio('win',
+                require('../../assets/audio/win.mp3'))
             .atlas('sprites',
                 require('../../assets/images/sprites.png'),
                 spritesData)
