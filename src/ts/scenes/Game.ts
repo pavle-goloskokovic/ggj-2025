@@ -35,7 +35,7 @@ const shuffle = function (array: Image[])
     return array;
 };
 
-const bubbleSortStep = (arr: number[], j: number): boolean =>
+/*const bubbleSortStep = (arr: number[], j: number): boolean =>
 {
     if (arr[j] > arr[j + 1])
     {
@@ -62,7 +62,7 @@ const bubbleSort = (arr: number[]): number[] =>
     return arr;
 };
 
-console.log(bubbleSort([5, 3, 1, 4, 6]));
+console.log(bubbleSort([5, 3, 1, 4, 6]));*/
 
 /**
  * Game Phaser scene.
@@ -83,16 +83,126 @@ export class Game extends Scene {
 
         const add = this.add;
 
-        add.image(x, 815, 'sprites', 'instructions');
-        add.image(580, 950, 'sprites', 'odd');
-        add.image(1340, 950, 'sprites', 'even');
+        const instructions = add.image(x, 815,
+            'sprites', 'instructions');
+        const fadeInstructions = () =>
+        {
+            if (instructions.alpha < 1) { return; }
+
+            this.tweens.add({
+                targets: instructions,
+                alpha: 0,
+                duration: 1000,
+                onComplete: () =>
+                {
+                    instructions.visible = false;
+                }
+            });
+            this.tweens.add({
+                targets: scoreText,
+                alpha: 1,
+                delay: 1000,
+                duration: 1000
+            });
+        };
+
+        const odd = add.image(580, 950, 'sprites', 'odd')
+            .setInteractive({ useHandCursor: true })
+            .on('pointerdown', () =>
+            {
+                if (odd.alpha < 1) { return; }
+
+                this.tweens.add({
+                    targets: [odd, even],
+                    alpha: 0.3,
+                    duration: 200
+                });
+
+                bet = 1;
+
+                play();
+            })
+            .once('pointerdown', fadeInstructions);
+
+        const even = add.image(1340, 950, 'sprites', 'even')
+            .setInteractive({ useHandCursor: true })
+            .on('pointerdown', () =>
+            {
+                if (even.alpha < 1) { return; }
+
+                this.tweens.add({
+                    targets: [odd, even],
+                    alpha: 0.3,
+                    duration: 200
+                });
+
+                bet = 0;
+
+                play();
+            })
+            .once('pointerdown', fadeInstructions);
+
+        const play = () =>
+        {
+            // shuffle(bars);
+
+            iterations = ii = jj = 0;
+
+            this.events.on('update', animationUpdate);
+        };
+
+        const endPlay = () =>
+        {
+            // console.log('completed', iterations);
+
+            const oldScore = score;
+            const delta = iterations % 2 === bet ?
+                iterations : -iterations;
+
+            this.tweens.addCounter({
+                duration: 2000,
+                onUpdate: (t) =>
+                {
+                    score = Math.round(oldScore + t.getValue() * delta);
+                    updateText();
+                },
+                onComplete: () =>
+                {
+                    score = oldScore + delta;
+                    updateText();
+
+                    for (let i = 0; i < bars.length; i++)
+                    {
+                        bars[i].alpha = 0;
+                    }
+
+                    shuffle(bars);
+
+                    this.tweens.add({
+                        targets: bars,
+                        alpha: 1,
+                        duration: 1000,
+                        onComplete: () =>
+                        {
+                            this.tweens.add({
+                                targets: [odd, even],
+                                alpha: 1,
+                                duration: 500
+                            });
+                        }
+                    });
+                }
+            });
+
+            this.events.off('update', animationUpdate);
+        };
 
         const bars: Image[] = [];
 
         for (let i = 0; i < 100; i++)
         {
             bars.push(add.image(
-                60 + 1 + i * 18,
+                60 + 9 + i * 18,
                 800 - 30/* - canopy[i]*/,
                 'sprites', i === 0 ? 'red' : 'white')
                 .setOrigin(0.5, 1)
@@ -111,14 +221,18 @@ export class Game extends Scene {
                     canopy[i]);*/
         }
 
-        const scoreText = add.text(60, 30,
-            'ITERATIONS: 0 \n' +
-            'SCORE: 0', {
-                fontFamily: 'font1',
-                align: 'left',
-                fontSize: 28
-            }
-        ).setOrigin(0);
+        const scoreText = add.text(x, 815, '', {
+            fontFamily: 'font1',
+            align: 'center',
+            fontSize: 40,
+            shadow: {
+                blur: 10,
+                fill: true,
+                offsetX: 5,
+                offsetY: 5
+            } })
+            .setOrigin(0.5)
+            .setAlpha(0);
 
         shuffle(bars);
 
@@ -141,6 +255,8 @@ export class Game extends Scene {
             return false;
         };
 
+        let bet = -1;
+        let score = 0;
         let iterations = 0;
         let ii = 0, jj = 0;
         const animationUpdate = () =>
@@ -153,8 +269,7 @@ export class Game extends Scene {
 
                 if (ii === bars.length)
                 {
-                    console.log('completed', iterations);
-                    this.events.off('update', animationUpdate);
+                    endPlay();
                     return;
                 }
 
@@ -170,8 +285,7 @@ export class Game extends Scene {
 
                     if (ii === bars.length)
                     {
-                        console.log('completed', iterations);
-                        this.events.off('update', animationUpdate);
+                        endPlay();
                         return;
                     }
                 }
@@ -181,10 +295,15 @@ export class Game extends Scene {
 
             iterations += processed;
 
-            scoreText.setText(
-                `ITERATIONS: ${iterations} \n` +
-                'SCORE: 0');
+            updateText();
         };
-        this.events.on('update', animationUpdate);
+
+        const updateText = () =>
+        {
+            scoreText.setText(
+                `ITERATIONS: ${iterations} | ` +
+                `SCORE: ${score}`);
+        };
+        updateText();
     }
 }
