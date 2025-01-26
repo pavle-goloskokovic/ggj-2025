@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import Scene = Phaser.Scene;
 import type { OcsSoundManager } from './Game';
+import Image = Phaser.GameObjects.Image;
 
 const canopy: number[] = [];
 for (let i = 0; i < 100; i++)
@@ -76,17 +77,49 @@ export class End extends Scene {
                 targets: blood,
                 displayHeight,
                 delay: 300 + Math.random() * 2000,
-                duration: (25000 + 20000 * Math.random())
+                duration: (27000 + 20000 * Math.random())
                     * displayHeight / 740,
                 ease: 'Sine.easeOut'
             });
         }
 
-        this.time.delayedCall(10000, () =>
+        const delay = 9000;
+        const loopDur = 3900;
+
+        this.time.delayedCall(delay, () =>
         {
-            sound.add('light', {
+            let lightLoops = 0;
+            const light = sound.add('light', {
                 loop: true,
-            }).play();
+            });
+            light.on('looped', () =>
+            {
+                lightLoops++;
+
+                if (lightLoops === 4)
+                {
+                    light.stop();
+
+                    sound.play('future');
+
+                    this.time.delayedCall(11600, () =>
+                    {
+                        // this.cameras.main.setPosition(x, y);
+                        this.cameras.main.panEffect.reset();
+                        this.cameras.main.pan(x, y, 0);
+
+                        this.children.removeAll();
+
+                        const caci = add.image(x,y, 'sprites', 'caci');
+
+                        this.time.delayedCall(400, () =>
+                        {
+                            caci.destroy();
+                        });
+                    });
+                }
+            });
+            light.play();
 
             this.tweens.addCounter({
                 duration: 2200,
@@ -96,6 +129,92 @@ export class End extends Scene {
                         0.8 * (1 - t.getValue()), 0);
                 }
             });
+        });
+
+        const people: Image[] = [];
+
+        this.time.delayedCall(delay, () =>
+        {
+            const p = add
+                .image(x, scale.height * 1.4, 'sprites', 'white')
+                .setDisplaySize(16, 100);
+
+            this.tweens.add({
+                targets: p,
+                y: scale.height * 0.85,
+                duration: 2500,
+                ease: 'Back.easeOut'
+            });
+
+            people.push(p);
+        });
+
+        this.time.delayedCall(delay + loopDur, () =>
+        {
+            const p = add
+                .image(scale.width * 0.65, scale.height * 1.4, 'sprites', 'white')
+                .setDisplaySize(16, 100);
+
+            this.tweens.add({
+                targets: p,
+                y: scale.height * 0.87,
+                duration: 2500,
+                ease: 'Back.easeOut'
+            });
+
+            people.push(p);
+        });
+
+        this.time.delayedCall(delay + loopDur, () =>
+        {
+            this.cameras.main.pan(x, scale.height * 5,
+                80000,
+                'Sine.easeInOut'
+            );
+        });
+
+        this.time.delayedCall(delay + loopDur * 1.7, () =>
+        {
+            for (let i = 0; i < 200; i++)
+            {
+                const p = add
+                    .image(scale.width * Math.random(),
+                        scale.height * (1.2 + 0.3 * Math.random()),
+                        'sprites', 'white')
+                    .setDisplaySize(16, 100);
+
+                this.tweens.add({
+                    targets: p,
+                    y: scale.height * (0.85 + 0.2 * Math.random()),
+                    delay: 400 * Math.random(),
+                    duration: 4000,
+                    ease: 'Sine.easeOut'
+                });
+
+                people.push(p);
+            }
+        });
+
+        this.time.delayedCall(delay + loopDur * 1.7, () =>
+        {
+            for (let i = 0; i < 1000; i++)
+            {
+                const p = add
+                    .image(scale.width * Math.random(),
+                        scale.height * (2 + Math.random()),
+                        'sprites', 'white')
+                    .setDisplaySize(16, 100);
+
+                this.tweens.add({
+                    targets: p,
+                    y: scale.height * (1 + 1 * Math.random()),
+                    delay: 500 * Math.random(),
+                    duration: 8000,
+                    ease: 'Sine.easeOut'
+                });
+
+                people.push(p);
+            }
         });
     }
 }

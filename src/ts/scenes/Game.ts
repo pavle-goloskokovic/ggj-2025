@@ -90,7 +90,7 @@ export class Game extends Scene {
                 70 + (1 - (h - 200) / 540) * 800, 0);
         };
 
-        /*updateFrequency(740);
+        /*osc.frequency.setValueAtTime(50, 0);
         oscVolume.gain.setValueAtTime(0.8, 0);
 
         this.scene.start('end');
